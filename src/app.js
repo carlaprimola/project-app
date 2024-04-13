@@ -12,6 +12,7 @@ const app = express();
 app.use(cors({
     origin: 'http://localhost:5173',
 }));
+
 app.use(morgan('dev')); //simplifica el proceso de registros
 app.use(express.json());
 app.use(cookieParser());
