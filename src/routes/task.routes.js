@@ -9,7 +9,7 @@ const router = Router();
 
 router.get('/tasks', authRequired, getTasks);
 router.get('/tasks/:id', authRequired, getTask);
-router.post('/tasks', authRequired, validateSchema(createTaskSchema), createTask);
+router.post('/add-task', authRequired, validateSchema(createTaskSchema), createTask);
 router.delete('/tasks/:id', authRequired, deleteTask);
 router.put('/tasks/:id', authRequired, updateTask);
 

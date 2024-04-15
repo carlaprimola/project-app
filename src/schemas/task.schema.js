@@ -8,6 +8,6 @@ export const createTaskSchema = z.object({
     description: z.string({
     required_error: "La descripción es requerida"
 }).optional(),
-    date: z.string().datetime().optional(),
+    date: z.string().datetime().optional()
 
 })
