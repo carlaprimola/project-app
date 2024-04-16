@@ -1,19 +1,39 @@
 import axios from "axios";
 import instance from "./axios";
 
+export const getTasksRequest = async () => {
+  try {
+    const response = await instance.get("/tasks")
 
-export const getTasksRequest = async () => axios.get("/tasks");
-
-export const createTaskRequest = async (task) => {
-  
-  //antes de una solicitud añadimos instance, que es el parametro que estamos usando dentro del archivo axios, para llamar a nuestro back
-  instance.post("/add-task", JSON.stringify(task), {
-  headers: {
-    "Content-Type": "application/json",
+    // console.log(response)
+    return response.data
+     
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    throw error;
   }
 
-})
-console.log(task)
+
+}
+
+
+
+
+export const createTaskRequest = async (task) => {
+  try {
+    const response = await instance.post("/add-task", JSON.stringify(task), {
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+
+    console.log("Response from createTaskRequest:", response);
+    
+    return response.data; // Devolver los datos de la tarea creada
+  } catch (error) {
+    console.error("Error creating task:", error);
+    throw error;
+  }
 }
 
 export const updateTaskRequest = async (task) =>
