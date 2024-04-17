@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { createTaskRequest, getTasksRequest } from "../api/tasks.js";
+import { createTaskRequest, getTasksRequest, deleteTaskRequest } from "../api/tasks.js";
 import PropTypes from 'prop-types';
 import { useEffect } from "react";
 
@@ -27,22 +27,23 @@ export function TaskProvider({ children }) {
   }
 
   const createTask = async (task) => {
-    console.log(task)
     try {
       const res = await createTaskRequest(task);
-      console.log(res)
-      if (res ) {
-        const { data, status, statusText, headers, config } = res;
-        console.log("Response from createTaskRequest:", res);
-        console.log(data)
-        setTasks(prevTasks => [...prevTasks, data]);
-        return { data, status, statusText, headers, config };
+      if (res) {
+        const newTask = res.data;
+        setTasks(prevTasks => [...prevTasks, newTask]);
+        return res;
       }    
     } catch (error) {
       console.error("Error creating task:", error);
       throw error;
     }   
   };
+  
+  const deleteTask = async (id) => {
+    const res = await deleteTaskRequest(id);
+    console.log(res)
+  }
 
   useEffect(() => {
     // console.log("Current tasks:", tasks);
@@ -57,6 +58,7 @@ export function TaskProvider({ children }) {
         tasks,
         createTask,
         getTasks,
+        deleteTask,
       }}
     >
       {children}

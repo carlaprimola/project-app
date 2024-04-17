@@ -25,14 +25,15 @@ export default function RegisterPage() {
   })  
 
 return (
-  <main className='bg-zinc-800 max-w-md p-10 rounded-md'>      
-    {
-    RegisterErrors && RegisterErrors.length > 0 && RegisterErrors.map((error, i) => (
+  <main className="flex h-[calc(100vh-100px)] items-center justify-center mt-20">
+    <div className="bg-zinc-800 p-10 rounded-md w-96">
+    {RegisterErrors && RegisterErrors.length > 0 && RegisterErrors.map((error, i) => (
       <p className='bg-red-500 p-2 text-white' key={i}>
         {error}
       </p>
     ))
   }
+    <h2 className="text-2xl font-bold text-center">Crear cuenta</h2>
     <form onSubmit={handleSubmit(onSubmit)}>
       <input type='text' {...register("username", {required: true})}
           className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
@@ -56,6 +57,8 @@ return (
       <button type='submit'>Register</button>
       <p className="flex gap x-2 justify-between">¿Ya tienes cuenta? <Link to="/login" className="text-sky-500">Iniciar sesión</Link></p>
     </form>
+      </div>  
+       
 
   </main>
 )

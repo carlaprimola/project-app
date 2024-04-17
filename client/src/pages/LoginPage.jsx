@@ -23,7 +23,7 @@ export default function LoginPage() {
   }, [isAuthenticated])
 
   return (
-    <main className="flex h-[calc(100vh-100px)] items-center justify-center">
+    <main className="flex h-[calc(100vh-100px)] items-center justify-center mt-20">
       <div className="bg-zinc-800 p-10 rounded-md w-96">
         {signinErrors &&
           signinErrors.length > 0 &&
@@ -32,7 +32,7 @@ export default function LoginPage() {
               {error}
             </p>
           ))}
-        <h2 className="text-2xl font-bold">Login</h2>
+        <h2 className="text-2xl font-bold text-center">Inicio sesión</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             type="email"
