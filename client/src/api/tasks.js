@@ -15,7 +15,20 @@ export const getTasksRequest = async () => {
 }
 
 //Mostrar una tarea
-export const getTaskRequest = async (id) => axios.get(`/tasks/${id}`);
+export const getTaskRequest = async (id) => {
+  try {
+    const response = instance.get(`/tasks/${id}`, JSON.stringify(id), {
+      headers:{
+        "Content-type": "application/json",
+  }});
+  console.log(response.data)
+  return (await response).data;
+  } catch (error) {
+    console.error("Error al mostrar la tarea:", error);
+      throw error;
+  }
+}
+
 
 //Crear tarea
 export const createTaskRequest = async (task) => {
@@ -41,18 +54,29 @@ export const deleteTaskRequest = async (id) => {
         "Content-type": "application/json",
       }
     });
-    console.log("Response from DeleteTaskRequest:",response.data)
-    return response.data;
+    console.log(response.data)
+    return response;
  } catch (error) {
    console.error("Error al eliminar la tarea:",error)
  }
 }
 
 
-
 //Editar una tarea
-export const updateTaskRequest = async (task) =>
-  axios.put(`/tasks/${task._id}`, task);
+export const updateTaskRequest = async (id, task) => {
+  try {
+    const response = await instance.put(`/tasks/${id}`, JSON.stringify(task), {
+      headers:{
+        "Content-type": "application/json",
+      }
+    });
+    console.log(response.data)
+    return response;
+  } catch (error) {
+    console.error("Error al editar la tarea:",error)
+  }
+}
+  
 
 
 

@@ -1,5 +1,9 @@
 import { createContext, useContext, useState } from "react";
-import { createTaskRequest, getTasksRequest, deleteTaskRequest } from "../api/tasks.js";
+import { createTaskRequest, 
+  getTasksRequest, 
+  deleteTaskRequest, 
+  getTaskRequest,
+updateTaskRequest } from "../api/tasks.js";
 import PropTypes from 'prop-types';
 import { useEffect } from "react";
 
@@ -15,6 +19,7 @@ export const useTasks = () => {
 export function TaskProvider({ children }) {
   const [tasks, setTasks] = useState([]);
 
+  //Get Tasks
   const getTasks = async() => {
     try {
       const res = await getTasksRequest()
@@ -26,6 +31,19 @@ export function TaskProvider({ children }) {
 
   }
 
+    //Get Task
+  const getTask = async (id) => {
+    try {
+    const res = await getTaskRequest(id)
+    console.log(res)
+    return res;
+    
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+    //Create Task
   const createTask = async (task) => {
     try {
       const res = await createTaskRequest(task);
@@ -40,10 +58,26 @@ export function TaskProvider({ children }) {
     }   
   };
   
+    //Delete Task
   const deleteTask = async (id) => {
-    const res = await deleteTaskRequest(id);
-    console.log(res)
+    try {
+      const res = await deleteTaskRequest(id);     
+      if (res.status === 200 || res.status === 204) setTasks(tasks.filter((task) => task._id !== id));
+          } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //Update Task
+  const updateTask = async (id, task) => {
+    try {
+      await updateTaskRequest(id, task);
+    } catch (error) {
+      console.error(error)
+    }
   }
+  
+  
 
   useEffect(() => {
     // console.log("Current tasks:", tasks);
@@ -58,7 +92,9 @@ export function TaskProvider({ children }) {
         tasks,
         createTask,
         getTasks,
+        getTask,
         deleteTask,
+        updateTask,
       }}
     >
       {children}
