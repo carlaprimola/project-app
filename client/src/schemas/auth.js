@@ -24,11 +24,5 @@ export const registerSchema = z
     password: z.string().min(6, {
       message: "La contraseña debe tener mínimo 6 caracteres",
     }),
-    confirmPassword: z.string().min(6, {
-      message: "La contraseña debe tener mínimo 6 caracteres",
-    }),
   })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Contraseña incorrecta",
-    path: ["confirmPassword"],
-  });
+ 

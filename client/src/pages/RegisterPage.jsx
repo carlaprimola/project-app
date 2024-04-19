@@ -8,16 +8,18 @@ import { Message } from "../components/ui/Message.jsx";
 import { Button } from "../components/ui/Button.jsx";
 import { Input } from "../components/ui/Input.jsx";
 import { Label } from "../components/ui/Label.jsx";
-import { loginSchema } from "../schemas/auth";
+import { registerSchema } from "../schemas/auth.js";
 
 export default function RegisterPage() {
   const {
     register,
     handleSubmit,
     formState: { errors: formErrors },
+    
   } = useForm({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(registerSchema),
   });
+  console.log(formErrors)
   const { signup, isAuthenticated, errors: RegisterErrors } = useAuth();
   const navigate = useNavigate();
 
@@ -29,7 +31,9 @@ export default function RegisterPage() {
   }, [isAuthenticated]);
 
   const onSubmit = handleSubmit(async (values) => {
+    console.log(values)
     signup(values);
+    
   });
 
   return (
