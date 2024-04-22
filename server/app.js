@@ -9,6 +9,7 @@ import taskRoutes from './routes/task.routes.js'
 
 const app = express();
 
+//configuramos el puerto
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true,

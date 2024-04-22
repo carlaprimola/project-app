@@ -8,3 +8,7 @@ export const Textarea = forwardRef((props, ref, rows = 2) => (
     rows={rows}
   />
 ));
+
+Textarea.displayName = 'Textarea';
+
+export default Textarea;

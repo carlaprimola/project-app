@@ -22,7 +22,7 @@ export const AuthProvider = ({children}) => {
 
     //register
     const signup = async (user) => {
-        console.log(user)
+        //console.log(user)
         try {
             const res = await registerRequest(user);
             if (res && res.data) {
@@ -49,12 +49,23 @@ export const AuthProvider = ({children}) => {
             console.log(res)
             setIsAuthenticated(true);
             setUser(res.data);
+            console.log(res.data)
         } catch (error) {
-            if(Array.isArray(error.response.data)) 
-            return setErrors(error.response.data);
+            if (error.response) {
+                console.log('Se produjo un error:', error);
+                if (error.response.status === 429) {
+                    // Añadir el mensaje de error del limitador a signinErrors
+                    console.log(error.response.data)
+                    setErrors(prevErrors => [...prevErrors, error.response.data]);
+                } else if (Array.isArray(error.response.data)) {
+                    console.log(error.response.data)
+                    return setErrors(error.response.data);
+                    
+                }
+            }
         }
-        //setErrors([error.response.data.message]);
     }
+    
 
     //logout
     const logout = () => {
@@ -97,7 +108,7 @@ export const AuthProvider = ({children}) => {
                 setUser(res.data);
                 setLoading(false)                
             } catch (error){
-                console.log(error)
+                //console.log(error)
                 setIsAuthenticated(false);
                 setUser(null);
                 setLoading(false)

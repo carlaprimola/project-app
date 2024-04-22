@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useTasks } from "../context/TaskContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
-
+import { Textarea } from "../components/ui/Textarea";
 import utc from 'dayjs/plugin/utc'
 import dayjs from "dayjs";
 dayjs.extend(utc)
@@ -63,7 +63,7 @@ useEffect(() => {
         />
 
         <label htmlFor="description">Descripción:</label>
-        <textarea
+        <Textarea
           rows={3}
           name="description"
           placeholder="description"

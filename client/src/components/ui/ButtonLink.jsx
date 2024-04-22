@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
 
 export const ButtonLink = ({ to, children }) => (
@@ -5,3 +6,8 @@ export const ButtonLink = ({ to, children }) => (
     {children}
   </Link>
 );
+
+ButtonLink.propTypes = {
+  to: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+};

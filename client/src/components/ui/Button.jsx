@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 export function Button({ onClick, children }) {
     return (
       <button
@@ -8,3 +10,10 @@ export function Button({ onClick, children }) {
       </button>
     );
   }
+
+  Button.propTypes = {
+    onClick: PropTypes.func,
+    children: PropTypes.node,
+  };
+
+  

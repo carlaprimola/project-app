@@ -6,7 +6,12 @@ export const loginSchema = z.object({
   }),
   password: z.string().min(6, {
     message: "La contraseña debe tener mínimo 6 caracteres",
-  }),
+  }).refine((data) => {    
+    if (data.password === "contraseñaIncorrecta") {
+      throw new Error("Contraseña incorrecta");
+    }    
+    return true;
+  })
 });
 
 export const registerSchema = z
