@@ -42,16 +42,17 @@ export default function LoginPage() {
 
   return (
     <main className="flex h-[calc(100vh-100px)] items-center justify-center mt-20">
-      <div className="bg-zinc-800 p-10 rounded-md w-96">
+      <div className="bg-zinc-800 p-10 rounded-md w-96 m-auto">
         <Card>
           {signinErrors &&
             signinErrors.length > 0 &&
             signinErrors.map((error, i) => (
-              <Message className="bg-red-500 p-2 text-white my-2" key={i}>
+              <Message key={i}       
+              >
                 {error}
               </Message>
             ))}
-          <h2 className="text-2xl font-bold text-center">Inicio sesión</h2>
+          <h2 className="mt-30 text-2xl font-bold text-center">Inicio sesión</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
                     
             <Label htmlFor="email">Email:</Label>
@@ -76,8 +77,9 @@ export default function LoginPage() {
               className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
               placeholder="Password"
             />
+
             {formErrors.password && (
-              <p className="bg-red-500 p-2 text-white my-2">{formErrors.password.message}</p>
+              <p className="bg-red-500 p-2 text-white my-2 h-20">{formErrors.password.message}</p>
             )}
 
             <Button

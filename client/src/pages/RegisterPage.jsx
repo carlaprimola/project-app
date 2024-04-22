@@ -13,19 +13,15 @@ import { registerSchema } from "../schemas/auth.js";
 
 import ReCAPTCHA from "react-google-recaptcha";
 
-
-
-
 export default function RegisterPage() {
   const {
     register,
     handleSubmit,
     formState: { errors: formErrors },
-    
   } = useForm({
     resolver: zodResolver(registerSchema),
   });
-  
+
   const { signup, isAuthenticated, errors: RegisterErrors } = useAuth();
   const navigate = useNavigate();
 
@@ -37,14 +33,12 @@ export default function RegisterPage() {
   }, [isAuthenticated]);
 
   const onSubmit = handleSubmit(async (values) => {
-    if(!recaptchaCompleted){
-     console.log("Completa el reCAPTCHA antes de registrarte.")()
-      return
-    } else{
+    if (!recaptchaCompleted) {
+      console.log("Completa el reCAPTCHA antes de registrarte.")();
+      return;
+    } else {
       signup(values);
-    }  
-   
-    
+    }
   });
 
   const [recaptchaCompleted, setRecaptchaCompleted] = useState(false);
@@ -52,23 +46,20 @@ export default function RegisterPage() {
   const onChange = () => {
     console.log("Captcha complete");
     setRecaptchaCompleted(true);
+  };
 
-  
-   };
-
-
-   return (
-    <main className="flex h-[calc(100vh-100px)] items-center justify-center mt-20">
-      <div className="bg-zinc-800 p-10 rounded-md w-96">
+  return (
+    <main className="px-10 flex h-[calc(100vh-100px)] items-center justify-center mt-10 mx-auto" style={{ paddingTop: '20px' }}>
+      {/* container mx-auto px-10 mt-5 */}
+      <div className="bg-zinc-800 p-10 rounded-md w-110 m-auto">
         <Card>
-          {RegisterErrors &&
-            RegisterErrors.length > 0 && (
-            <div className="relative" style={{ marginBottom: '2rem' }}>
+          {RegisterErrors && RegisterErrors.length > 0 && (
+            <div className="relative" style={{ marginBottom: "2rem" }}>
               {RegisterErrors.map((error, i) => (
                 <Message
                   className="bg-red-500 p-2 text-white mb-5"
                   key={i}
-                  style={{ marginBottom: '0.5rem' }}
+                  style={{ marginBottom: "0.5rem" }}
                 >
                   {error}
                 </Message>
@@ -87,9 +78,11 @@ export default function RegisterPage() {
               autoComplete="off"
             />
             {formErrors.username && (
-              <Message message="Este campo es obligatorio" />
+              <Message message={formErrors.username.message} />
+              
+
             )}
-            
+
             <Label htmlFor="email">Email:</Label>
             <input
               type="email"
@@ -99,34 +92,32 @@ export default function RegisterPage() {
               className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
               placeholder="Email"
             />
-            {formErrors.email && (
-              <Message message="Este campo es obligatorio" />
-            )}
+            {formErrors.email && <Message message={formErrors.email.message} />}
             <Label htmlFor="password">Password:</Label>
             <input
               type="password"
               id="password"
               autoComplete="off"
               {...register("password", { required: true })}
-              className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+              className="w-full bg-zinc-700 text-white px-4 py-1 rounded-md my-2"
               placeholder="Password"
             />
             {formErrors.password && (
-              <Message message="Este campo es obligatorio" />
+              <Message message={formErrors.password.message} />
             )}
-  
+
             {/* Recaptcha */}
-            <div className="w-full mx-auto my-2" style={{ marginTop: '2rem' }}>
+            <div className="w-full mx-auto my-2" style={{ marginTop: "2rem" }}>
               <ReCAPTCHA
                 sitekey="6LdXacEpAAAAACGdk8ZNcEm0zjpFlTb9cXxqTWEs"
                 secretkey="6LdXacEpAAAAALGR6abuvJdiCIcIvYPFdqJSWGK4"
                 onChange={onChange}
-                className="cursor-pointer flex justify-center border-none text-white w-full rounded-md py-4"
+                className="cursor-pointer flex justify-center border-none text-white w-full rounded-md"
                 theme="dark"
                 required={true}
               />
             </div>
-  
+
             <div className="flex justify-center">
               <Button
                 className="bg-sky-500 text-white px-4 py-2 rounded-md my-2 hover:bg-sky-600"
@@ -135,7 +126,7 @@ export default function RegisterPage() {
                 Register
               </Button>
             </div>
-  
+
             <p className="flex gap x-2 justify-between">
               ¿Ya tienes cuenta?{" "}
               <Link to="/login" className="text-sky-500 hover:text-sky-400">
@@ -147,6 +138,4 @@ export default function RegisterPage() {
       </div>
     </main>
   );
-  
-  
 }
