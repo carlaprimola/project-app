@@ -22,7 +22,7 @@ export const AuthProvider = ({children}) => {
     });
 
     useEffect(() => {
-        console.log('Usuario autenticado:', isAuthenticated);
+        //console.log('Usuario autenticado:', isAuthenticated);
         localStorage.setItem('isAuthenticated', isAuthenticated);
     }, [isAuthenticated]);
 
@@ -61,7 +61,7 @@ export const AuthProvider = ({children}) => {
     const signin = async (user) => {
         try {            
             const res = await loginRequest(user);
-            console.log(res)
+            //console.log(res)
             setIsAuthenticated(true);
             // Guarda el estado de autenticación en localStorage
             localStorage.setItem('isAuthenticated', true);
@@ -69,7 +69,7 @@ export const AuthProvider = ({children}) => {
             localStorage.setItem('user', JSON.stringify(res.data));
             console.log('Usuario autenticado:', isAuthenticated);
             setUser(res.data);
-            console.log(res.data)
+            //console.log(res.data)
         } catch (error) {
             if (error.response) {
                 console.log('Se produjo un error:', error);

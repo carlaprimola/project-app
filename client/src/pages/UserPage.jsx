@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import { userRequest } from "../api/auth.js";
+import { userRequest, deleteUserRequest } from "../api/auth.js";
 import { useAuth } from "../context/AuthContext.jsx";
-import { deleteUserRequest } from "../api/auth.js";
+import { toast } from 'react-toastify'
+import DeleteModal from "../components/users/DeleteModal.jsx";
 
 function UserPage() {
-  const [users, setUsers] = useState([]); 
+  const [users, setUsers] = useState([]);  
+  const [isOpen, setIsOpen] = useState(false);
+  const [userIdToDelete, setUserIdToDelete] = useState(null);
   const {user} = useAuth()
 
   // Obtén los usuarios al cargar la página
@@ -34,15 +37,31 @@ function UserPage() {
     );
   }
 
+
+ 
   // Función para manejar la eliminación de usuarios
   const handleDelete = (userId) => {    
-    deleteUserRequest(userId)
+    setUserIdToDelete(userId);
+    setIsOpen(true);
+};
+
+  // Función para confirmar la eliminación
+  const confirmDelete = () => {
+    deleteUserRequest(userIdToDelete)
       .then(() => {        
-        setUsers(users.filter(user => user._id !== userId));
+        setUsers(users.filter(user => user._id !== userIdToDelete));
+        toast.success('Usuario eliminado con éxito');
+        setIsOpen(false);
       })
       .catch(error => {
+        toast.error('Hubo un error al eliminar el usuario');
         console.error('There was an error!', error);
       });
+  };
+
+  // Función para cerrar el modal
+  const closeModal = () => {
+    setIsOpen(false);
   };
 
   // Si el usuario es admin, muestra la lista de usuarios
@@ -100,6 +119,12 @@ function UserPage() {
           ))}
         </tbody>
       </table>
+
+      {/* Modal de eliminar */}
+      <DeleteModal isOpen={isOpen} onConfirm={confirmDelete} onClose={closeModal} userIdToDelete={userIdToDelete} setUserIdToDelete={setUserIdToDelete} />
+
+
+
     </main>
   );
 }
