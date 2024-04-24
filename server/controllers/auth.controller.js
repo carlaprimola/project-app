@@ -58,6 +58,12 @@ export const login = async (req, res) => {
         if (!isMatch) return res.status(400).json({ message: 'La contraseña es incorrecta' })
 
         const token = await createAccessToken({ _id: userLogged._id })
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production", // las cookies solo se envían a través de HTTPS en producción
+            maxAge: 3600000, // duración de la cookie
+            sameSite: "strict" // las cookies solo se envían al mismo sitio
+        })
 
         // Verificar el rol del usuario
         if (userLogged.tipoRol === 'user') {
@@ -69,7 +75,7 @@ export const login = async (req, res) => {
                 email: userLogged.email,
                 role: userLogged.tipoRol,
                 isAdmin: false,               
-                
+                tipoRol: userLogged.tipoRol,
             });
         } else {
             // Usuario con rol de admin
@@ -80,7 +86,7 @@ export const login = async (req, res) => {
                 email: userLogged.email,
                 role: userLogged.tipoRol,
                 isAdmin: true,
-                
+                tipoRol: userLogged.tipoRol,
             });
         }
     } catch (error) {
@@ -111,23 +117,43 @@ export const profile = async (req, res) => {
    })
 }
    //no dejar continuar tras el login si no hay token
-   export const verifyToken = async (req, res) => {
+   export const verifyToken = async (req, res, next) => {
     const {token} =  req.cookies
+    console.log("🔐",req.cookies)
     if (!token) return res.status(401).json({message: "No se ha encontrado ningún token"})
+    
+    try {
+        // Verificar el token
+        const payload = jwt.verify(token, TOKEN_SECRET);
+        console.log('El token es válido y su payload es:', payload);
 
-    jwt.verify(token, TOKEN_SECRET, async (err, user) => {
-        if (err) return res.status(401).json ({message: "No autorizado"}) 
-
-        const userFound = await User.findById(user._id)
+        const userFound = await User.findById(payload._id)
         if(!userFound) return res.status(403).json({message: 'Usuario no encontrado'})
 
-        return res.json({
-            id: userFound._id,
-            username: userFound.username,
-            email: userFound.email,
-        })
-    })
+        req.user = userFound; // Adjuntar el usuario al objeto de solicitud
+        next(); // Pasar al siguiente middleware o controlador
+    } catch (error) {
+        console.error('El token no es válido:', error);
+        res.status(500).json({message: 'Hubo un error al verificar el token'});
+    }
 }
+
+
+
+    //Verificar el tipo de rol
+    export const isAdmin = (req, res, next) => {
+        try {
+            if (req.user.tipoRol !== 'admin') {
+                return res.status(403).json({message: 'Requiere rol de administrador'});
+            }
+            next();
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({message: 'Hubo un error al verificar el rol del usuario'});
+        }
+    }
+    
+
 
 // Controlador para mostrar todos los usuarios
 export const getAllUsers = async (req, res) => {
@@ -160,7 +186,6 @@ export const updateUser = async (req, res) => {
     }
 };
 
-// Controlador para eliminar un usuario
 // Controlador para eliminar un usuario
 export const deleteUser = async (req, res) => {
     const userId = req.params.id;

@@ -8,6 +8,8 @@ import TaskFormPage from "./pages/TaskFormPage.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import { TaskProvider } from "./context/TaskContext.jsx";
 import Navbar from "./components/ui/Navbar.jsx";
+import UserPage from "./pages/UserPage.jsx";
+import ProfilePage from "./pages/ProfilePage.jsx";
 
 
 function App() {
@@ -27,7 +29,8 @@ function App() {
             <Route path="/tasks" element={<TaskPage />} />
             <Route path="/add-task" element={<TaskFormPage />} />
             <Route path="/tasks/:id" element={<TaskFormPage />} />
-            
+            <Route path="/user" element={<UserPage/>} />
+            <Route path="/profile" element={<ProfilePage/>} />
           </Route>
         </Routes>
         </main>

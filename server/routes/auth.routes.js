@@ -1,5 +1,14 @@
 import { Router } from "express";
-import { login, logout, register, profile, verifyToken, getAllUsers, updateUser, deleteUser } from "../controllers/auth.controller.js";
+import { login, 
+  logout, 
+  register, 
+  profile, 
+  verifyToken, 
+  getAllUsers, 
+  updateUser, 
+  deleteUser,
+  isAdmin } from "../controllers/auth.controller.js";
+  import { getUsers } from "../controllers/admin.controller.js";
 import { authRequired } from "../middlewares/validateToken.js";
 import { validateSchema } from "../middlewares/validator.middleware.js";
 import { registerSchema, loginSchema } from "../schemas/auth.schema.js";
@@ -30,7 +39,7 @@ router.get('/verify', verifyToken)
 router.get('/profile', authRequired, profile)
 
 //rutas para el admin
-router.get('/user', getAllUsers); //muestra todos los usuarios
+router.get('/user', verifyToken, isAdmin, getUsers); //muestra todos los usuarios
 router.patch('/user/:id', authRequired, updateUser); //actualiza un usuario
 router.delete('/user/:id', authRequired, deleteUser); //elimina un usuario
 

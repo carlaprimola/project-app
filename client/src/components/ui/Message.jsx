@@ -10,7 +10,7 @@ export function Message({ message }) {
 }
 
 Message.propTypes = {
-  message: PropTypes.string.isRequired,
+  message: PropTypes.string,
 };
 
 

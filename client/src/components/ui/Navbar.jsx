@@ -11,17 +11,23 @@ export default function Navbar() {
       <Link to={
         isAuthenticated ? "/tasks" : "/"
       }>
-        <h1 className="text-2xl font-bold">Task Application</h1>
+        <h1 className="text-2xl font-bold">Gestión de Proyectos</h1>
       </Link>
 
       <ul className="flex gap-x-2">
         {isAuthenticated ? (
           <>
-            <li>¡Hola, <strong>{user.username}</strong>!</li>
+            <li>¡Hola, <strong>{user ? user.username : 'Invitado'}</strong>!</li>
+
             <li>
               <Link 
               className="bg-indigo-500 px-4 py-1 rounded-sm hover:bg-indigo-600"
               to="/add-task">Nueva tarea</Link>
+            </li>
+            <li>
+              <Link 
+              className="px-4 py-1 rounded-sm "
+              to="/user">Usuarios</Link>
             </li>
             <li>
               <Link 

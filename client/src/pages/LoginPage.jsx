@@ -26,12 +26,14 @@ export default function LoginPage() {
   const { signin, errors: signinErrors, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    signin(data);
-    if (signinErrors && signinErrors.length > 0) {
+  const onSubmit = async (data) => {
+    try {
+      await signin(data);
+    } catch (error) {
       toast.error('Has excedido el límite de intentos. Por favor, inténtalo más tarde.');
     }
   }
+  
   
 
   useEffect(() => {

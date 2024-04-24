@@ -6,6 +6,7 @@ import Cookies from 'js-cookie'
 
 
 
+
 export const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -15,8 +16,22 @@ export const useAuth = () => {
 }
 
 export const AuthProvider = ({children}) => {
-    const [user, setUser] = useState(null);	
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const savedAuthState = localStorage.getItem('isAuthenticated');
+    return savedAuthState ? JSON.parse(savedAuthState) : false;
+    });
+
+    useEffect(() => {
+        console.log('Usuario autenticado:', isAuthenticated);
+        localStorage.setItem('isAuthenticated', isAuthenticated);
+    }, [isAuthenticated]);
+
+    const [user, setUser] = useState(() => {
+        const savedUser = localStorage.getItem('user');
+        return savedUser ? JSON.parse(savedUser) : null;
+    });
+      
+
     const [errors, setErrors] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -48,6 +63,11 @@ export const AuthProvider = ({children}) => {
             const res = await loginRequest(user);
             console.log(res)
             setIsAuthenticated(true);
+            // Guarda el estado de autenticación en localStorage
+            localStorage.setItem('isAuthenticated', true);
+            // Guarda el objeto user en localStorage
+            localStorage.setItem('user', JSON.stringify(res.data));
+            console.log('Usuario autenticado:', isAuthenticated);
             setUser(res.data);
             console.log(res.data)
         } catch (error) {
@@ -75,6 +95,12 @@ export const AuthProvider = ({children}) => {
     }
     useEffect(() => {
     }, [])
+
+    //Verificar el estado de isAuthenticated
+    useEffect(() => {
+        //console.log('Usuario autenticado:', isAuthenticated);
+    }, [isAuthenticated]);
+    
 
     //contador mensajes error
     useEffect(() => {
