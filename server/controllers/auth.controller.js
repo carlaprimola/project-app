@@ -3,6 +3,10 @@ import bcrypt from 'bcryptjs'
 import { createAccessToken } from '../libs/jwt.js';
 import jwt from 'jsonwebtoken';
 import { TOKEN_SECRET } from '../config.js';
+import { cleanAndValidate } from '../../client/src/schemas/auth.js';
+import { registerSchema } from '../../client/src/schemas/auth.js';
+import { loginSchema } from '../../client/src/schemas/auth.js';
+
 
 //Register
 export const register = async (req, res) => {
@@ -138,8 +142,6 @@ export const profile = async (req, res) => {
     }
 }
 
-
-
     //Verificar el tipo de rol
     export const isAdmin = (req, res, next) => {
         try {
@@ -151,8 +153,7 @@ export const profile = async (req, res) => {
             console.error(error);
             res.status(500).json({message: 'Hubo un error al verificar el rol del usuario'});
         }
-    }
-    
+    }   
 
 
 // Controlador para mostrar todos los usuarios
@@ -165,7 +166,6 @@ export const getAllUsers = async (req, res) => {
         res.status(500).json({ message: 'Error al obtener los usuarios' });
     }
 };
-
 
 // Controlador para actualizar un usuario
 export const updateUser = async (req, res) => {
@@ -204,5 +204,29 @@ export const deleteUser = async (req, res) => {
         res.status(500).json({ message: 'Error al eliminar el usuario' });
     }
 };
+
+// Función para manejar el registro de usuarios
+export const cleanRegister = async (req, res) => {
+    try {
+      const cleanData = cleanAndValidate(req.body, registerSchema);
+      const user = await User.create(cleanData);
+     console.log(user);
+      res.status(201).json({ message: 'User registered successfully', user });
+    } catch (error) {
+      return res.status(400).json({message: error.errors.map(err => err.message)});
+    }
+  };
+
+  // Función para manejar el inicio de sesión de usuarios
+export const cleanLogin = async (req, res) => {
+    try {
+      const cleanData = cleanAndValidate(req.body, loginSchema);
+      // Procesa cleanData
+    } catch (error) {
+      return res.status(400).json({message: error.message
+    })
+}
+  };
+  
 
 

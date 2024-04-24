@@ -1,9 +1,12 @@
 // Schema de autenticación para el front
 import { z } from "zod";
+import validator from 'validator';
+import xss from 'xss'; //libreria para prevenir ataques XSS, ayuda a limpiar los datos de entrada
 
-// Función para verificar si el correo electrónico es válido
+//Funcion para validar si el email es válido
 function isValidEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  email = email.trim().toLowerCase(); //elimina espacios y transforma el texto en minusculas
+  return email.length <= 100 && validator.isEmail(email); //menos de 100 caracteres y valida formato email
 }
 
 // Login
@@ -29,6 +32,9 @@ export const registerSchema = z.object({
     })
     .min(3, {
       message: "Username debe tener mínimo 3 caracteres",
+    })
+    .max(10,{
+      message: "Username debe tener máximo 10 caracteres",
     }),
   email: z
     .string()
@@ -36,8 +42,8 @@ export const registerSchema = z.object({
       message: "El email es obligatorio",
     })
     .refine((value) => {
-      // Validar si el formato del correo electrónico no es correcto utilizando una expresión regular
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      // Validar si el formato del correo electrónico no es correcto utilizando la función isValidEmail
+      return isValidEmail(value);
     }, {
       message: "El formato del email no es válido",
     }),
@@ -46,3 +52,14 @@ export const registerSchema = z.object({
   }),
 });
 
+
+// Función para limpiar y validar los datos de entrada
+export function cleanAndValidate(data, schema) {
+  // Limpiar los datos de entrada
+  const cleanData = Object.fromEntries(
+    Object.entries(data).map(([key, value]) => [key, xss(value)])
+  );
+
+  // Validar los datos limpios
+  return schema.parse(cleanData);
+}
