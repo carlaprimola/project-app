@@ -11,3 +11,8 @@ export const loginRequest = user => axios.post(`/login`,user);
 export const verifyTokenRequest = () => axios.get('/verify');
 
 export const userRequest = () => axios.get('/user');
+
+export const deleteUserRequest = (userId) => {
+    return axios.delete(`/user/${userId}`);
+  };
+  
