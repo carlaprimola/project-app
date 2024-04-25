@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import path from 'path';
 
 const connectDB = async () => {
   try {
@@ -8,6 +9,14 @@ const connectDB = async () => {
     console.log("❌ Error al conectar a MongoDB", error);
   }
 };
+
+const __dirname = path.resolve();
+
+app.use(express.static(path.join(__dirname, '/client/dist')));
+
+app.get('*', (req, res) =>{
+    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
 
 export default connectDB;
 
