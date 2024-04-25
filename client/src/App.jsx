@@ -6,7 +6,7 @@ import TaskPage from "./pages/TaskPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import TaskFormPage from "./pages/TaskFormPage.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
-import { TaskProvider } from "./context/TaskContext.jsx";
+import TaskProvider  from "./context/TaskContext.jsx";
 import Navbar from "./components/ui/Navbar.jsx";
 import UserPage from "./pages/UserPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
