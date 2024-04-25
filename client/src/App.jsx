@@ -12,6 +12,7 @@ import UserPage from "./pages/UserPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 
 
+
 function App() {
   return (
     <AuthProvider>
