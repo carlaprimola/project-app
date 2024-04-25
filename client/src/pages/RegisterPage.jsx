@@ -34,6 +34,7 @@ export default function RegisterPage() {
 
   useEffect(() => {
     register('honeypot');
+    register('timestamp');
   }, [register]);
   
 
@@ -43,9 +44,12 @@ export default function RegisterPage() {
       console.log("Completa el reCAPTCHA antes de registrarte.")();
       return;
     } else {
-      signup(values);
-    }
-  });
+      // Establecer el valor de timestamp justo antes de enviar el formulario
+    values.timestamp = Date.now();
+    signup(values);
+      }      
+      });
+  
 
   // Funcion Recaptcha
   const [recaptchaCompleted, setRecaptchaCompleted] = useState(false);  
@@ -78,10 +82,16 @@ export default function RegisterPage() {
 
             {/* campo oculto1 */}
             <input className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2" 
-            type="text"             
+            type="hidden"             
             name="honeypot" 
-            {...register("honeypot", { required: true })} 
+            {...register("honeypot")} 
             autoComplete="off"            
+            />
+            {/* campo oculto2 */}
+            <input 
+            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+            type="hidden" {...register('timestamp')} 
+            value={Date.now()} 
             />
 
             <Label htmlFor="username">Username:</Label>

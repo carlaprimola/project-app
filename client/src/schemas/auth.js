@@ -51,6 +51,7 @@ export const registerSchema = z.object({
     message: "La contraseña debe tener mínimo 6 caracteres",
   }),
   honeypot: z.string().optional(),
+  timestamp: z.string().optional(),
 });
 
 

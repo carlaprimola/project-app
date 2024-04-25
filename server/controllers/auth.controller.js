@@ -11,13 +11,20 @@ import { loginSchema } from '../../client/src/schemas/auth.js';
 //Register
 export const register = async (req, res) => {
     console.log(req.body);
-    const { username, email, password, tipoRol, honeypot } = req.body;      
+    const { username, email, password, tipoRol, honeypot, timestamp } = req.body;      
 
     if (honeypot) {
         // si el campo honeypot tiene algún valor, es probable que sea un bot
         return res.status(400).send({ error: 'Alerta bot 🤖'});
-        console.log('El usuario parece ser un bot 🤖');
+        
       }
+
+      // Comprobar si el formulario se envió demasiado rápido
+    const timeElapsed = Date.now() - timestamp;
+    if (timeElapsed < 10000) { // 5000 milisegundos = 5 segundos
+        return res.status(400).send({ error: 'El formulario se envió demasiado rápido 🤖'});
+        console.log('El formulario se envió demasiado rápido 🤖');
+    }
 
     // Validar el valor de tipoRol solo si se proporciona en la solicitud
     if (tipoRol && tipoRol !== "admin" && tipoRol !== "user") {
