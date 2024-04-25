@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import path from 'path';
+import app from './app.js';
+import express from "express";
 
 const connectDB = async () => {
   try {
