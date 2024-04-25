@@ -32,7 +32,13 @@ export default function RegisterPage() {
     }
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    register('honeypot');
+  }, [register]);
+  
+
   const onSubmit = handleSubmit(async (values) => {
+    console.log(values);
     if (!recaptchaCompleted) {
       console.log("Completa el reCAPTCHA antes de registrarte.")();
       return;
@@ -41,16 +47,17 @@ export default function RegisterPage() {
     }
   });
 
-  const [recaptchaCompleted, setRecaptchaCompleted] = useState(false);
-  // Funcion Recapcha
+  // Funcion Recaptcha
+  const [recaptchaCompleted, setRecaptchaCompleted] = useState(false);  
   const onChange = () => {
     console.log("Captcha complete");
     setRecaptchaCompleted(true);
   };
+ 
 
   return (
     <main className="px-10 flex h-[calc(100vh-100px)] items-center justify-center mt-10 mx-auto" style={{ paddingTop: '20px' }}>
-      {/* container mx-auto px-10 mt-5 */}
+      
       <div className="bg-zinc-800 p-10 rounded-md w-110 m-auto">
         <Card>
           {RegisterErrors && RegisterErrors.length > 0 && (
@@ -68,6 +75,15 @@ export default function RegisterPage() {
           )}
           <h2 className="text-2xl font-bold text-center">Crear cuenta</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
+
+            {/* campo oculto1 */}
+            <input className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2" 
+            type="text"             
+            name="honeypot" 
+            {...register("honeypot", { required: true })} 
+            autoComplete="off"            
+            />
+
             <Label htmlFor="username">Username:</Label>
             <input
               type="text"

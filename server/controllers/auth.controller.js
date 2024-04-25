@@ -10,7 +10,14 @@ import { loginSchema } from '../../client/src/schemas/auth.js';
 
 //Register
 export const register = async (req, res) => {
-    const { username, email, password, tipoRol } = req.body;
+    console.log(req.body);
+    const { username, email, password, tipoRol, honeypot } = req.body;      
+
+    if (honeypot) {
+        // si el campo honeypot tiene algún valor, es probable que sea un bot
+        return res.status(400).send({ error: 'Alerta bot 🤖'});
+        console.log('El usuario parece ser un bot 🤖');
+      }
 
     // Validar el valor de tipoRol solo si se proporciona en la solicitud
     if (tipoRol && tipoRol !== "admin" && tipoRol !== "user") {
